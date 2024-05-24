@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sine Wave</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Darker+Grotesque:wght@300..900&family=Didact+Gothic&family=Domine:wght@400..700&family=DotGothic16&family=Krona+One&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@1,300..900&family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="menu">
+        <label for="rotationSpeed">Rotation Speed</label>
+        <input type="range" id="rotationSpeed" min="1" max="40" value="20">
+
+        <label for="rotationX">Rotation X</label>
+        <input type="range" id="rotationX" min="0" max="360" value="60">
+
+        <label for="rotationY">Rotation Y</label>
+        <input type="range" id="rotationY" min="0" max="360" value="0">
+
+        <label for="numShapes">Number of Shapes</label>
+        <input type="range" id="numShapes" min="1" max="200" value="30">
+        
+        <label for="area">Degree</label>
+        <input type="range" id="area" min="1" max="360" value="360">
+
+        <label for="dimensions">Dimensions</label>
+        <input type="range" id="dimensions" min="1" max="200" value="10">
+
+        <label for="zOffset">Z offset</label>
+        <input type="range" id="zOffset" min="2" max="200" value="80">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script>
+        let rotationSpeed;
+        let rotationX;
+        let rotationY;
+        let numShapes;
+        let area;
+        let dimensions;
+        let zOffset;
+        function setup(){
+            createCanvas(windowWidth, windowHeight, WEBGL);
+            angleMode(DEGREES);
+            rotationSpeed = document.getElementById('rotationSpeed');
+            rotationX = document.getElementById('rotationX');
+            rotationY = document.getElementById('rotationY');
+            numShapes = document.getElementById('numShapes');
+            area = document.getElementById('area');
+            dimensions = document.getElementById('dimensions');
+            zOffset = document.getElementById('zOffset');
+        }
+        function draw(){
+            background(30);
+            rotateX(rotationX.value);
+            rotateY(rotationY.value);
+            noFill();
+            stroke(255);
+
+            for(var i = 0; i < numShapes.value; i++){
+                var r = map(sin(frameCount/2), -1, 1, 100, 200);
+                var g = map(i, 0, 20, 100, 255);
+                var b = map(cos(frameCount), -1, 1, 255, 100);
+
+                stroke(r, g, b);
+                rotate(frameCount/rotationSpeed.value)
+                beginShape();
+                for(var j=0; j<area.value; j+=5){
+                    var rad = i * dimensions.value;
+                    var x = rad * cos(j);
+                    var y = rad * sin(j);
+                    var z = sin(frameCount + i * 10) * zOffset.value;
+                    vertex(x,y,z);
+                }
+                endShape(CLOSE);
+            }
+        }
+    </script>
+</body>
+</html>
